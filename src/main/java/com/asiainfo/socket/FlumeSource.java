@@ -30,7 +30,7 @@ public class FlumeSource extends AbstractSource implements Configurable,Pollable
     private static int flag = 0;
     private static final String HEADERS_KEY = "key";
     private static final String MESSAGE_SEPARATOR = "\n";
-    private static final String HEADERS_KEY_SEPARATOR = "|";
+    private static final String HEADERS_KEY_SEPARATOR = "\\|";
 
 
     @Override
@@ -91,7 +91,8 @@ public class FlumeSource extends AbstractSource implements Configurable,Pollable
                 for (String signalling : messages){
                     Map<String, String> headers = new HashMap();
                     try{
-                        headers.put(HEADERS_KEY, signalling.trim().substring(0, signalling.indexOf(HEADERS_KEY_SEPARATOR)));
+                        //第4字段为imsi,作为key
+                        headers.put(HEADERS_KEY, signalling.trim().split(HEADERS_KEY_SEPARATOR)[3]);
                     }catch (StringIndexOutOfBoundsException e){
                         logger.error("The message format is invalid. <" + signalling + ">");
                         continue;
