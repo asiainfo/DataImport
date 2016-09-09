@@ -23,19 +23,21 @@ public class SocketClient {
 
 
         long startTime=System.currentTimeMillis();
-        for (int i = 0; i < Integer.valueOf(args[2]); i++) {
-            outToServer.write(getMessage());
-            System.out.print("send success\n");
-            in.readLine();
+        try {
+            while (true){
+                outToServer.write(getMessage());
+                System.out.print("send success\n");
+                in.readLine();
+            }
+        }catch (Exception e){
+            System.out.print(e);
+        }finally {
+            clientSocket.close();
+
+            long endTime = System.currentTimeMillis(); //获取结束时间
+            System.out.println("End time : " + new Date());
+            System.out.println("Take <" + (endTime-startTime)+"> ms");
         }
-
-
-        clientSocket.close();
-
-        long endTime = System.currentTimeMillis(); //获取结束时间
-        System.out.println("End time : " + new Date());
-        System.out.println("Take <" + (endTime-startTime)+"> ms");
-
 
         //getMessage();
 
