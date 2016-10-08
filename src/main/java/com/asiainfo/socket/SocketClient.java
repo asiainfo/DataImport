@@ -48,7 +48,7 @@ public class SocketClient {
         Random r = new Random();
         String msg="";
         long beginTime = System.currentTimeMillis();
-        int randint = r.nextInt(10);
+        int randint = r.nextInt(5000000);
         long imsi = 4600092691019400L + randint;
         String imsi_04 = String.valueOf(imsi);
         String beginTime_01 = String.valueOf(beginTime);
