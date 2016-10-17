@@ -82,26 +82,26 @@ public class SocketAnalysisTask implements Runnable {
                     //禁用SDTP协议,指定msgtype为5, 指定信令长度为113
 
                     //消息的总长度，用2个字节表示
-                    //ds.readFully(len);
-                    //length = SocketUtil.bytesToInt(len);
-                    //logger.info("length=" + length);
+                    ds.readFully(len);
+                    length = SocketUtil.bytesToInt(len);
+                    logger.info("length=" + length);
                     //消息类型,用2个字节表示
-                    //ds.readFully(type);
-                    //logger.info(ds);
-                    //msgType = SocketUtil.bytesToInt(type);
-                    //logger.info("msgType=" + msgType);
+                    ds.readFully(type);
+                    logger.info(ds);
+                    msgType = SocketUtil.bytesToInt(type);
+                    logger.info("msgType=" + msgType);
 
                     //message type是版本协商请求，回复版本信息
                     byte[] sequenceId = new byte[4];
 
-                    //ds.readFully(sequenceId);
+                    ds.readFully(sequenceId);
                     int ss = SocketUtil.bytes2Int(sequenceId);
 
 
                     byte ct = 0;
 
-                    //ct = ds.readByte();//包头均已读完
-                    msgType = 0x0005;
+                    ct = ds.readByte();//包头均已读完
+                    //msgType = 0x0005;
                     logger.info( "context" + ct );
                     if (msgType == 0x0001) {//版本请求
                         logger.info("msgType == 0x0001");
@@ -139,7 +139,7 @@ public class SocketAnalysisTask implements Runnable {
                         logger.info("msgType == 0x0005");
                         logger.info("i am here---------0x0005");
                         xdrRawDataCount++;
-                        byte[] contextArr = new byte[113];
+                        byte[] contextArr = new byte[length - 9];
                         //ds.skipBytes(10);
                         ds.readFully(contextArr);
                         msgQueue.offer(contextArr);

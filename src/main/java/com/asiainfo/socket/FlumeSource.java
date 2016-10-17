@@ -90,16 +90,19 @@ public class FlumeSource extends AbstractSource implements Configurable,Pollable
 
                 for (String signalling : messages){
                     Map<String, String> headers = new HashMap();
+                    //第4字段为imsi,作为key
+                    String imsi = signalling.trim().split(HEADERS_KEY_SEPARATOR)[3];
                     try{
-                        //第4字段为imsi,作为key
-                        headers.put(HEADERS_KEY, signalling.trim().split(HEADERS_KEY_SEPARATOR)[3]);
+                        headers.put(HEADERS_KEY, imsi);
                     }catch (StringIndexOutOfBoundsException e){
                         logger.error("The message format is invalid. <" + signalling + ">");
                         continue;
                     }
-
-                    Event e = EventBuilder.withBody(signalling.getBytes(), headers);
-                    getChannelProcessor().processEvent(e);
+                    //去除imsi为0的无效信令
+                    if (!imsi.equals("000000000000000")){
+                        Event e = EventBuilder.withBody(signalling.getBytes(), headers);
+                        getChannelProcessor().processEvent(e);
+                    }
                 }
 
                 //Event e = EventBuilder.withBody(msg);
